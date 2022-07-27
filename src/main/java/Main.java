@@ -5,12 +5,15 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         // create an executor
-        ExecutorService executor; 
+        ExecutorService executor = Executors.newSingleThreadExecutor();
 
         while (scanner.hasNext()) {
+            System.out.println("Enter a number to check if it is prime, enter 0 to exit");
             int num = scanner.nextInt();
-            // submit tasks to your executor
+            executor.submit(new PrimeLogger(num));
+            if (num == 0) break;
         }
+        executor.shutdown();
     }
 }
 
@@ -23,6 +26,15 @@ class PrimeLogger implements Runnable {
 
     @Override
     public void run() {
-        // print num if it is prime
+        boolean isPrime = num > 1;
+
+        for (int i = 2; i < num; i++) {
+            if (num % i == 0) {
+                isPrime = false;
+                break;
+            }
+        }
+
+        if (isPrime) System.out.println(num + " is prime");
     }
 }
